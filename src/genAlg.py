@@ -35,7 +35,7 @@ class GenAlg:
 
             listElitism = []
             for x in range(self.__list_opt['elit']):
-                listElitism.append(tools.selBest(pop, 0)[0])
+                listElitism.append(tools.selBest(pop, 1)[0])
 
             for child1, child2 in zip(offspring[::2], offspring[1::2]):
 

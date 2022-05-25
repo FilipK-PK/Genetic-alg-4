@@ -13,7 +13,7 @@ SELECT = [
 ]
 CROSS = [
     'krzyzowania',
-    ['1-point', '2-points', 'jednolite'],
+    ['1-point', '2-points'],
     'cross'
 ]
 
