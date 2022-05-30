@@ -6,13 +6,20 @@ import random
 
 def SVCParameters(numberFeatures, icls):
     listKernel = ["linear", "rbf", "poly", "sigmoid"]
+    listDec = ["ovo", "ovr"]
 
     gen = [
             listKernel[random.randint(0, 3)],
             random.uniform(0.1, 100),
             random.uniform(0.1, 5),
             random.uniform(0.001, 5),
-            random.uniform(0.01, 10)
+            random.uniform(0.01, 10),
+            random.uniform(1e-6, 1e-1),
+            True if random.randint(0, 1) == 1 else False,
+            True if random.randint(0, 1) == 1 else False,
+            listDec[random.randint(0, 1)],
+            #random.randint(100, 400)
+
         ]
 
     for i in range(numberFeatures):
@@ -27,17 +34,22 @@ def SVCParametersFitness(y, df, numberOfAtributtes, individual):
 
     listColumnsToDrop = []
     for i in range(numberOfAtributtes, len(individual)):
+
         if individual[i] == 0:
             listColumnsToDrop.append(i - numberOfAtributtes)
-    dfSelectedFeatures = df.drop(df.columns[listColumnsToDrop], axis=1,
-                                 inplace=False)
+
+    dfSelectedFeatures = df.drop(df.columns[listColumnsToDrop], axis=1, inplace=False)
 
     mms = MinMaxScaler()
     df_norm = mms.fit_transform(dfSelectedFeatures)
+
     estimator = SVC(
         kernel=individual[0], C=individual[1],
         degree=individual[2], gamma=individual[3],
-        coef0=individual[4], random_state=101
+        coef0=individual[4], tol=individual[5],
+        shrinking=individual[6], probability=individual[7],
+        decision_function_shape=individual[8], #cache_size=individual[9],
+        random_state=101
     )
 
     resultSum = 0
@@ -76,7 +88,24 @@ def mutationSVC(individual):
 
     elif numberParamer == 4:
         coeff = random.uniform(0.1, 1)
-        individual[2] = coeff
+        individual[4] = coeff
+
+    elif numberParamer == 5:
+        tol = random.uniform(1e-6, 1e-1)
+        individual[5] = tol
+
+    elif numberParamer == 6:
+        individual[6] = False if individual[6] else False
+
+    elif numberParamer == 7:
+        individual[7] = False if individual[7] else False
+
+    elif numberParamer == 8:
+        listDec = ["ovo", "ovr"]
+        individual[8] = listDec[random.randint(0, 1)]
+
+    #elif numberParamer == 9:
+        #individual[9] = random.randint(100, 400)
 
     else:
         if individual[numberParamer] == 0:
