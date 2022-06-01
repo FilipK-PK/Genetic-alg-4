@@ -17,6 +17,18 @@ CROSS = [
     'cross'
 ]
 
+CLASS_OPT = [
+    'klasyfikatora',
+    ['svc', 'k_neighbors', 'tree', 'mlpt', 'gauss', 'random forest'],
+    'class_opt',
+]
+
+COLUMN_USE = [
+    'wykluczania kolumn',
+    ['tak', 'nie'],
+    'use_col'
+]
+
 BIT = ['długosci cechy', 'bit']
 LEN_POPU = ['populacji', 'len_popu']
 EPOCH = ['liczby epok', 'epoch']
@@ -64,6 +76,9 @@ class Cui:
 
     """ Metoda wuwołuje wszystkie zapytania """
     def run(self):
+
+        self.__put_quest(CLASS_OPT)
+        self.__put_quest(COLUMN_USE)
 
         self.__put_val(LEN_POPU)
         self.__put_val(EPOCH)

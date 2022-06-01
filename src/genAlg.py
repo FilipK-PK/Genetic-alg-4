@@ -1,6 +1,8 @@
 from deap import tools
 from src import statistic
 from src.toolbox import ToolBox
+from src.machine import svc as svc_m, kneighbors, tree
+from src.machine import mlpc, gauss, random_tree
 
 import pandas as pd
 import random
@@ -13,8 +15,21 @@ class GenAlg:
 
     def run(self):
         self.__load_data()
+        self.__set_machin()
         self.__set_toolbox()
         self.__find_el()
+
+    def __set_machin(self):
+        class_opt = {
+            'svc': svc_m.Svc,
+            'k_neighbors': kneighbors.KNeighbors,
+            'tree': tree.Tree,
+            'mlpt': mlpc.Mlpc,
+            'gauss': gauss.Gauss,
+            'random forest': random_tree.RandomTree
+        }
+
+        self.__class_opt = class_opt[self.__list_opt['class_opt']]
 
     def __find_el(self):
 
@@ -82,6 +97,6 @@ class GenAlg:
     def __set_toolbox(self):
         toolbox = ToolBox(
             self.__list_opt, len(self.__df.columns),
-            self.__y, self.__df
+            self.__y, self.__df, self.__class_opt
         )
         self.__toolbox = toolbox.get_opt()
